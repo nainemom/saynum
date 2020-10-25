@@ -53,7 +53,6 @@ const say = async (num) => {
     }
     const m999xxxxxx = (_num) => {
         const _a = Math.floor(_num / 1000000) % 1000;
-        console.warn(_a);
         return _a ? [
             ...m9xx(_a),
             ...m99(_a),
