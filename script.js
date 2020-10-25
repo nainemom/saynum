@@ -5,6 +5,7 @@ const $ = (selector) => document.querySelector(selector);
 const $sayBtn = $('#saybtn');
 const $video = $('#video');
 const $number = $('#number');
+const $playInOrder = $('#playinorder');
 
 // listeners
 $sayBtn.onclick = () => {
@@ -12,15 +13,29 @@ $sayBtn.onclick = () => {
     $video.style.opacity = 1;
     $sayBtn.disabled = true;
     $number.disabled = true;
+    $playInOrder.disabled = true;
     say(number).then(() => {
         $video.style.opacity = 0;
         $number.disabled = null;
         $sayBtn.disabled = null;
+        $playInOrder.disabled = null;
     });
 };
+$playInOrder.onclick = async () => {
+    if (!confirm('Are you sure?')) return;
+    $sayBtn.disabled = true;
+    $number.disabled = true;
+    $playInOrder.disabled = true;
+    for(let i = 1; i < 1000000000; i++) {
+        $video.style.opacity = 1;
+        await say(i);
+        $video.style.opacity = 0;
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+}
 
 // states
-const a = ['', 'yek', 'do', 'se', 'chahar', 'panj', 'shesh', 'haft', 'hasht', 'noh', 'dah', 'yazdah', 'davazdah', 'sizdah', 'chahardah', 'punzdah', 'shunzdah', 'hifdah', 'hijdah', 'nuzdah'];
+const a = ['', 'yek', 'do', 'se', 'chahar', 'panj', 'shish', 'haft', 'hasht', 'noh', 'dah', 'yazdah', 'davazdah', 'sizdah', 'chahardah', 'punzdah', 'shunzdah', 'hifdah', 'hijdah', 'nuzdah'];
 const b = ['bist', 'si', 'chehel', 'panjah', 'shast', 'haftad', 'hashtad', 'navad'];
 const c = ['sad', 'divist', 'sisad', 'charsad', 'punsad', 'shishsad', 'haftsad', 'hashtsad', 'nohsad'];
 const d = ['hezar', 'milyun', 'milyard'];
