@@ -6,10 +6,14 @@ const $sayBtn = $('#saybtn');
 const $video = $('#video');
 const $number = $('#number');
 const $playInOrder = $('#playinorder');
+const $sayingNum = $('#sayingnum');
 
 // listeners
 $sayBtn.onclick = () => {
     const number = parseInt($number.value);
+    if (number > 999999999999) {
+        return $number.value = 999999999999;
+    };
     $video.style.opacity = 1;
     $sayBtn.disabled = true;
     $number.disabled = true;
@@ -26,7 +30,7 @@ $playInOrder.onclick = async () => {
     $sayBtn.disabled = true;
     $number.disabled = true;
     $playInOrder.disabled = true;
-    for(let i = 1; i < 1000000000; i++) {
+    for(let i = 1; i <= 1000000000; i++) {
         $video.style.opacity = 1;
         await say(i);
         $video.style.opacity = 0;
@@ -39,10 +43,11 @@ const a = ['', 'yek', 'do', 'se', 'chahar', 'panj', 'shish', 'haft', 'hasht', 'n
 const b = ['bist', 'si', 'chehel', 'panjah', 'shast', 'haftad', 'hashtad', 'navad'];
 const c = ['sad', 'divist', 'sisad', 'charsad', 'punsad', 'shishsad', 'haftsad', 'hashtsad', 'nohsad'];
 const d = ['hezar', 'milyun', 'milyard'];
-const z = 'o';
+const o = 'o';
 
 // methods
 const say = async (num) => {
+    $sayingNum.innerHTML = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
     const m99 = (_num) => {
         let ret = [];
         const _a = _num % 10;
@@ -74,12 +79,23 @@ const say = async (num) => {
             d[1],
         ] : [];
     }
+    const m999xxxxxxxxx = (_num) => {
+        const _a = Math.floor(_num / 1000000000) % 1000000;
+        return _a ? [
+            ...m9xx(_a),
+            ...m99(_a),
+            d[2],
+        ] : [];
+    }
     const ret = [
+        ...m999xxxxxxxxx(num),
         ...m999xxxxxx(num),
         ...m999xxx(num),
         ...m9xx(num),
         ...m99(num),
-    ].filter(x=>!!x);
+    ].filter(x=>!!x).map((x,i,f)=>!a.includes(x) && i !== f.length - 1 ? [x, o] : x).flat();
+
+
     const sounds = [];
     for(const part of ret) {
         const sound = new Audio(`./voices/${part}.mp3`);
@@ -93,7 +109,9 @@ const say = async (num) => {
     for(const sound of sounds) {
         sound.play();
         await new Promise(resolve => {
-            setTimeout(resolve, (sound.duration * 1000) - 50);
+            setTimeout(resolve, (sound.duration * 1000) - 120);
         });
     }
+    $sayingNum.innerHTML = '';
+    return ret;
 }
