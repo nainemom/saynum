@@ -66,13 +66,20 @@ const say = async (num) => {
         ...m9xx(num),
         ...m99(num),
     ].filter(x=>!!x);
+    const sounds = [];
     for(const part of ret) {
         const sound = new Audio(`./voices/${part}.mp3`);
+        sounds.push(sound);
         await new Promise(resolve => {
             sound.addEventListener('loadeddata', () => {
-                sound.play();
-                setTimeout(resolve, (sound.duration * 1000) - 50);
+                resolve();
             });
+        });
+    }
+    for(const sound of sounds) {
+        sound.play();
+        await new Promise(resolve => {
+            setTimeout(resolve, (sound.duration * 1000) - 50);
         });
     }
 }
