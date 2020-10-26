@@ -7,6 +7,7 @@ const $video = $('#video');
 const $number = $('#number');
 const $playInOrder = $('#playinorder');
 const $sayingNum = $('#sayingnum');
+const $loading = $('#loading');
 
 // listeners
 $sayBtn.onclick = () => {
@@ -14,12 +15,10 @@ $sayBtn.onclick = () => {
     if (number > 999999999999) {
         return $number.value = 999999999999;
     };
-    $video.style.opacity = 1;
     $sayBtn.disabled = true;
     $number.disabled = true;
     $playInOrder.disabled = true;
     say(number).then(() => {
-        $video.style.opacity = 0;
         $number.disabled = null;
         $sayBtn.disabled = null;
         $playInOrder.disabled = null;
@@ -31,9 +30,7 @@ $playInOrder.onclick = async () => {
     $number.disabled = true;
     $playInOrder.disabled = true;
     for(let i = 1; i <= 1000000000; i++) {
-        $video.style.opacity = 1;
         await say(i);
-        $video.style.opacity = 0;
         await new Promise(resolve => setTimeout(resolve, 500));
     }
 }
@@ -43,11 +40,12 @@ const a = ['', 'yek', 'do', 'se', 'chahar', 'panj', 'shish', 'haft', 'hasht', 'n
 const b = ['bist', 'si', 'chehel', 'panjah', 'shast', 'haftad', 'hashtad', 'navad'];
 const c = ['sad', 'divist', 'sisad', 'charsad', 'punsad', 'shishsad', 'haftsad', 'hashtsad', 'nohsad'];
 const d = ['hezar', 'milyun', 'milyard'];
-const o = 'o';
 
 // methods
 const say = async (num) => {
-    $sayingNum.innerHTML = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
+    $video.style.opacity = 0;
+    $loading.innerHTML = 'Loading...';
+    $sayingNum.innerHTML = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     const m99 = (_num) => {
         let ret = [];
         const _a = _num % 10;
@@ -95,7 +93,6 @@ const say = async (num) => {
         ...m99(num),
     ].filter(x=>!!x).map((x,i,f)=>!a.includes(x) && i !== f.length - 1 ? [`${x}-o`] : x).flat();
 
-
     const sounds = [];
     for(const part of ret) {
         const sound = new Audio(`./voices/${part}.mp3`);
@@ -106,6 +103,8 @@ const say = async (num) => {
             });
         });
     }
+    $loading.innerHTML = '';
+    $video.style.opacity = 1;
     for(const sound of sounds) {
         sound.play();
         await new Promise(resolve => {
@@ -113,5 +112,6 @@ const say = async (num) => {
         });
     }
     $sayingNum.innerHTML = '';
+    $video.style.opacity = 0;
     return ret;
 }
