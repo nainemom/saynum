@@ -93,7 +93,7 @@ const say = async (num) => {
         ...m999xxx(num),
         ...m9xx(num),
         ...m99(num),
-    ].filter(x=>!!x).map((x,i,f)=>!a.includes(x) && i !== f.length - 1 ? [x, o] : x).flat();
+    ].filter(x=>!!x).map((x,i,f)=>!a.includes(x) && i !== f.length - 1 ? [`${x}-o`] : x).flat();
 
 
     const sounds = [];
@@ -109,7 +109,7 @@ const say = async (num) => {
     for(const sound of sounds) {
         sound.play();
         await new Promise(resolve => {
-            setTimeout(resolve, (sound.duration * 1000) - 120);
+            setTimeout(resolve, (sound.duration * 1000) - 105);
         });
     }
     $sayingNum.innerHTML = '';
