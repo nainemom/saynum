@@ -6,10 +6,17 @@ const $sayBtn = $('#saybtn');
 const $video = $('#video');
 const $number = $('#number');
 const $playInOrder = $('#playinorder');
+const $stop = $('#stop');
 const $sayingNum = $('#sayingnum');
 const $loading = $('#loading');
 
+// states
+let stopSaying = false;
+
 // listeners
+$stop.onclick = () => {
+    stopSaying = true;
+};
 $sayBtn.onclick = () => {
     const number = parseInt($number.value);
     if (number > 999999999999) {
@@ -25,17 +32,23 @@ $sayBtn.onclick = () => {
     });
 };
 $playInOrder.onclick = async () => {
-    if (!confirm('Are you sure?')) return;
+    stopSaying = false;
     $sayBtn.disabled = true;
     $number.disabled = true;
+    $stop.style.display = null;
     $playInOrder.disabled = true;
     for(let i = 1; i <= 1000000000; i++) {
+        if (stopSaying) break;
         await say(i);
         await new Promise(resolve => setTimeout(resolve, 500));
     }
+    $stop.style.display = 'none';
+    $sayBtn.disabled = false;
+    $number.disabled = false;
+    $playInOrder.disabled = false;
 }
 
-// states
+// constants
 const a = ['', 'yek', 'do', 'se', 'chahar', 'panj', 'shish', 'haft', 'hasht', 'noh', 'dah', 'yazdah', 'davazdah', 'sizdah', 'chahardah', 'punzdah', 'shunzdah', 'hifdah', 'hijdah', 'nuzdah'];
 const b = ['bist', 'si', 'chehel', 'panjah', 'shast', 'haftad', 'hashtad', 'navad'];
 const c = ['sad', 'divist', 'sisad', 'charsad', 'punsad', 'shishsad', 'haftsad', 'hashtsad', 'nohsad'];
