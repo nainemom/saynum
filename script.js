@@ -104,7 +104,7 @@ const say = async (num) => {
         ...m999xxx(num),
         ...m9xx(num),
         ...m99(num),
-    ].filter(x=>!!x).map((x,i,f)=>!a.includes(x) && i !== f.length - 1 ? [`${x}-o`] : x).flat();
+    ].filter(x=>!!x).map((x,i,f)=>!a.includes(x) && i !== f.length - 1 && !d.includes(f[i+1]) ? [`${x}-o`] : x).flat();
 
     const sounds = [];
     for(const part of ret) {
